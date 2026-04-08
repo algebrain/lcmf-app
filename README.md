@@ -12,3 +12,17 @@ Current scope:
 
 The library intentionally stays small.
 It is not a framework and does not own module behavior.
+
+## Development
+
+Primary local check flow:
+
+- `bb test.bb`
+
+Direct commands:
+
+- `clojure -M:lint`
+- `clojure -M:test`
+- `clojure -M:format`
+
+Tests run through `shadow-cljs` on the `cljs/node` runtime.

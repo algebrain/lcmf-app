@@ -26,18 +26,20 @@
 
    Returns a map of module-id -> init result."
   [app-deps module-specs]
-  (reduce (fn [acc {:keys [module/id module/init!]
-                    :as module-spec}]
-            (when-not id
-              (throw (ex-info "Module spec is missing :module/id"
-                              {:reason :missing-module-id
-                               :module-spec module-spec})))
-            (when-not init!
-              (throw (ex-info "Module spec is missing :module/init!"
-                              {:reason :missing-module-init
-                               :module-id id
-                               :module-spec module-spec})))
-            (assoc acc id (init! (module-deps app-deps id))))
+  (reduce (fn [acc module-spec]
+            (let [id (:module/id module-spec)
+                  init! (:module/init! module-spec)]
+              (when-not id
+                (throw (ex-info "Module spec is missing :module/id"
+                                {:reason :missing-module-id
+                                 :module-spec module-spec})))
+              (when-not init!
+                (throw (ex-info "Module spec is missing :module/init!"
+                                {:reason :missing-module-init
+                                 :module-id id
+                                 :module-spec module-spec})))
+              (assoc acc id
+                     (init! (module-deps app-deps id)))))
           {}
           module-specs))
 
